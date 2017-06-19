@@ -21,11 +21,11 @@ type Config struct {
 // Exemple:
 // 	tabT := []Test{}
 // 	err  := Load(Config{
-// 		path: "csv_files/valid.csv",
-// 		dest: &tabT,
-// 		separator: ';',
-// 		header: []string{"header1", "header2", "header3"}
-// 	})
+// 			path: "csv_files/valid.csv",
+// 			dest: &tabT,
+// 			separator: ';',
+// 			header: []string{"header1", "header2", "header3"}
+// 		})
 // The 'separator' and 'header' properties of the config object are optionals
 // @param dest: object where to store the result
 // @return an error if one occure
