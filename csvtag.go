@@ -18,7 +18,7 @@ type Config struct {
 
 // Load - Load a csv file and put it in a array of the dest type
 // This uses tags
-// Exemple:
+// Example:
 // 	tabT := []Test{}
 // 	err  := Load(Config{
 // 			path: "csv_files/valid.csv",
