@@ -10,10 +10,10 @@ import (
 
 // Config struct to pass to the Load function
 type Config struct {
-	path      string
-	dest      interface{}
-	separator rune
-	header    []string
+	Path      string
+	Dest      interface{}
+	Separator rune
+	Header    []string
 }
 
 // Load - Load a csv file and put it in a array of the dest type
@@ -30,9 +30,9 @@ type Config struct {
 // @param dest: object where to store the result
 // @return an error if one occure
 func Load(config Config) error {
-	header, content, err := readFile(config.path, config.separator, config.header)
+	header, content, err := readFile(config.Path, config.Separator, config.Header)
 	if err != nil {
-		return fmt.Errorf("Error while loading csv (%v):\n	==> %v", config.path, err)
+		return fmt.Errorf("Error while loading csv (%v):\n	==> %v", config.Path, err)
 	}
 	// This means that the file is empty
 	if content == nil {
@@ -40,11 +40,11 @@ func Load(config Config) error {
 	}
 	// If there is some header in the config, don't skip the first line
 	start := 1
-	if config.header != nil {
+	if config.Header != nil {
 		start = 0
 	}
 	// Map content to the destination
-	err = mapToDest(header, content[start:], config.dest)
+	err = mapToDest(header, content[start:], config.Dest)
 	if err != nil {
 		return fmt.Errorf("Error while mapping the content to the destination:\n	==> %v", err)
 	}

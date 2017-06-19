@@ -25,8 +25,8 @@ func checkValues(tabT []test) bool {
 func TestValideFile(t *testing.T) {
 	tabT := []test{}
 	err := Load(Config{
-		path: "csv_files/valid.csv",
-		dest: &tabT,
+		Path: "csv_files/valid.csv",
+		Dest: &tabT,
 	})
 	if err != nil || checkValues(tabT) {
 		t.Fail()
@@ -36,8 +36,8 @@ func TestValideFile(t *testing.T) {
 func TestMissATag(t *testing.T) {
 	tabT := []testNoID{}
 	err := Load(Config{
-		path: "csv_files/valid.csv",
-		dest: &tabT,
+		Path: "csv_files/valid.csv",
+		Dest: &tabT,
 	})
 	if err != nil ||
 		tabT[0].Name != "line1" || tabT[0].ID != 0 || tabT[0].Num != 0 ||
@@ -50,8 +50,8 @@ func TestMissATag(t *testing.T) {
 func TestEmptyFile(t *testing.T) {
 	tabT := []test{}
 	err := Load(Config{
-		path: "csv_files/empty.csv",
-		dest: &tabT,
+		Path: "csv_files/empty.csv",
+		Dest: &tabT,
 	})
 	if err != nil || len(tabT) != 0 {
 		t.Fail()
@@ -61,9 +61,9 @@ func TestEmptyFile(t *testing.T) {
 func TestNoHeader(t *testing.T) {
 	tabT := []test{}
 	err := Load(Config{
-		path:   "csv_files/noHeader.csv",
-		dest:   &tabT,
-		header: []string{"header1", "header2", "header3"},
+		Path:   "csv_files/noHeader.csv",
+		Dest:   &tabT,
+		Header: []string{"header1", "header2", "header3"},
 	})
 	if err != nil || checkValues(tabT) {
 		t.Fail()
@@ -73,9 +73,9 @@ func TestNoHeader(t *testing.T) {
 func TestWithSemicolon(t *testing.T) {
 	tabT := []test{}
 	err := Load(Config{
-		path:      "csv_files/semicolon.csv",
-		dest:      &tabT,
-		separator: ';',
+		Path:      "csv_files/semicolon.csv",
+		Dest:      &tabT,
+		Separator: ';',
 	})
 	if err != nil || checkValues(tabT) {
 		t.Fail()
@@ -85,8 +85,8 @@ func TestWithSemicolon(t *testing.T) {
 func TestBadFormat(t *testing.T) {
 	tabT := []test{}
 	err := Load(Config{
-		path: "csv_files/badFormat.csv",
-		dest: &tabT,
+		Path: "csv_files/badFormat.csv",
+		Dest: &tabT,
 	})
 	if err == nil {
 		t.Fail()
@@ -96,8 +96,8 @@ func TestBadFormat(t *testing.T) {
 func TestNonexistingFile(t *testing.T) {
 	tabT := []test{}
 	err := Load(Config{
-		path: "csv_files/nonexistingfile.csv",
-		dest: &tabT,
+		Path: "csv_files/nonexistingfile.csv",
+		Dest: &tabT,
 	})
 	if err == nil {
 		t.Fail()
@@ -107,8 +107,8 @@ func TestNonexistingFile(t *testing.T) {
 func TestBadInt(t *testing.T) {
 	tabT := []test{}
 	err := Load(Config{
-		path: "csv_files/badInt.csv",
-		dest: &tabT,
+		Path: "csv_files/badInt.csv",
+		Dest: &tabT,
 	})
 	if err == nil {
 		t.Fail()
@@ -118,8 +118,8 @@ func TestBadInt(t *testing.T) {
 func TestBadFloat(t *testing.T) {
 	tabT := []test{}
 	err := Load(Config{
-		path: "csv_files/badFloat.csv",
-		dest: &tabT,
+		Path: "csv_files/badFloat.csv",
+		Dest: &tabT,
 	})
 	if err == nil {
 		t.Fail()
@@ -128,7 +128,7 @@ func TestBadFloat(t *testing.T) {
 
 func TestNotPath(t *testing.T) {
 	err := Load(Config{
-		dest: &[]test{},
+		Dest: &[]test{},
 	})
 	if err == nil {
 		t.Fail()
@@ -137,7 +137,7 @@ func TestNotPath(t *testing.T) {
 
 func TestNoDest(t *testing.T) {
 	err := Load(Config{
-		path: "csv_files/valid.csv",
+		Path: "csv_files/valid.csv",
 	})
 	if err == nil {
 		t.Fail()
@@ -146,8 +146,8 @@ func TestNoDest(t *testing.T) {
 
 func TestNoDist(t *testing.T) {
 	err := Load(Config{
-		path: "csv_files/valid.csv",
-		dest: &test{},
+		Path: "csv_files/valid.csv",
+		Dest: &test{},
 	})
 	if err == nil {
 		t.Fail()
