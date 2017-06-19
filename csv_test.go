@@ -1,4 +1,4 @@
-package gocsv
+package csvtag
 
 import "testing"
 
