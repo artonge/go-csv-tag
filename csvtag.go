@@ -32,7 +32,7 @@ type Config struct {
 func Load(config Config) error {
 	header, content, err := readFile(config.Path, config.Separator, config.Header)
 	if err != nil {
-		return fmt.Errorf("Error while loading csv (%v):\n	==> %v", config.Path, err)
+		return fmt.Errorf("Error loading csv '%v':\n	==> %v", config.Path, err)
 	}
 	// This means that the file is empty
 	if content == nil {
@@ -46,7 +46,7 @@ func Load(config Config) error {
 	// Map content to the destination
 	err = mapToDest(header, content[start:], config.Dest)
 	if err != nil {
-		return fmt.Errorf("Error while mapping the content to the destination:\n	==> %v", err)
+		return fmt.Errorf("Error mapping the content to the destination\n	==> %v", err)
 	}
 	return nil
 }
@@ -122,15 +122,15 @@ func mapToDest(header map[string]int, content [][]string, dest interface{}) erro
 			if fieldTag == "" {
 				continue
 			}
-			rflFld := item.Field(j) // Get the reflected value of the field
+			fieldRv := item.Field(j) // Get the reflected value of the field
 			fieldPos, ok := header[fieldTag]
 			if !ok {
 				continue
 			}
-			valStr := record[fieldPos]        // Get the value from the record
-			err := storeValue(valStr, rflFld) // Store the value in the reflected field
+			rawVal := record[fieldPos]         // Get the value from the record
+			err := storeValue(rawVal, fieldRv) // Store the value in the reflected field
 			if err != nil {
-				return fmt.Errorf("(record %v to the slice %v):\n	==> %v", record, item, err)
+				return fmt.Errorf("record: %v to slice: %v:\n	==> %v", record, item, err)
 			}
 		}
 	}
@@ -139,30 +139,30 @@ func mapToDest(header map[string]int, content [][]string, dest interface{}) erro
 	return nil
 }
 
-// Set the value of the rflVal to valStr
+// Set the value of the valRv to rawVal
 // Make some parsing if needed
-// @param valStr: the value, as a string, that we want to store
-// @param rflVal: the reflected value where we want to store our value
+// @param rawVal: the value, as a string, that we want to store
+// @param valRv: the reflected value where we want to store our value
 // @return an error if one occure
-func storeValue(valStr string, rflVal reflect.Value) error {
-	switch rflVal.Kind() {
+func storeValue(rawVal string, valRv reflect.Value) error {
+	switch valRv.Kind() {
 	case reflect.String:
-		rflVal.SetString(valStr)
+		valRv.SetString(rawVal)
 	case reflect.Int:
 		// Parse the value to an int
-		value, err := strconv.ParseInt(valStr, 10, 64)
+		value, err := strconv.ParseInt(rawVal, 10, 64)
 		if err != nil {
-			return fmt.Errorf("Error while parsing int %v:\n	==> %v", valStr, err)
+			return fmt.Errorf("Error parsing int '%v':\n	==> %v", rawVal, err)
 
 		}
-		rflVal.SetInt(value)
+		valRv.SetInt(value)
 	case reflect.Float64:
 		// Parse the value to an float
-		value, err := strconv.ParseFloat(valStr, 64)
+		value, err := strconv.ParseFloat(rawVal, 64)
 		if err != nil {
-			return fmt.Errorf("Error while parsing float %v:\n	==> %v", valStr, err)
+			return fmt.Errorf("Error parsing float '%v':\n	==> %v", rawVal, err)
 		}
-		rflVal.SetFloat(value)
+		valRv.SetFloat(value)
 	}
 
 	return nil
