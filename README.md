@@ -1,9 +1,12 @@
 # go-csv-tag
 Read csv file from go using tags
 
-![cover.run go](https://cover.run/go/github.com/artonge/go-csv-tag.svg)
 [![godoc for artonge/go-csv-tag](https://godoc.org/github.com/artonge/go-csv-tag?status.svg)](http://godoc.org/github.com/artonge/go-csv-tag)
+
+[![Build Status](https://travis-ci.org/artonge/go-csv-tag.svg?branch=master)](https://travis-ci.org/artonge/go-csv-tag)
+![cover.run go](https://cover.run/go/github.com/artonge/go-csv-tag.svg)
 [![goreportcard for artonge/go-csv-tag](https://goreportcard.com/badge/github.com/artonge/go-csv-tag)](https://goreportcard.com/report/artonge/go-csv-tag)
+
 [![Sourcegraph for artonge/go-csv-tag](https://sourcegraph.com/github.com/artonge/go-csv-tag/-/badge.svg)](https://sourcegraph.com/github.com/artonge/go-csv-tag?badge)
 
 
