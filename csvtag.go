@@ -151,7 +151,7 @@ func storeValue(rawVal string, valRv reflect.Value) error {
 	case reflect.Int:
 		// Parse the value to an int
 		value, err := strconv.ParseInt(rawVal, 10, 64)
-		if err != nil {
+		if err != nil && rawVal != "" {
 			return fmt.Errorf("Error parsing int '%v':\n	==> %v", rawVal, err)
 
 		}
@@ -159,7 +159,7 @@ func storeValue(rawVal string, valRv reflect.Value) error {
 	case reflect.Float64:
 		// Parse the value to an float
 		value, err := strconv.ParseFloat(rawVal, 64)
-		if err != nil {
+		if err != nil && rawVal != "" {
 			return fmt.Errorf("Error parsing float '%v':\n	==> %v", rawVal, err)
 		}
 		valRv.SetFloat(value)
