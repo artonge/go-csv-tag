@@ -29,12 +29,12 @@ type Demo struct {                         // A structure with tags
 	Num  float64 `csv:"number"`
 }
 
-tab := []Demo{}                            // Create the slice where to put the file content
-err  := csvtag.Load(csvtag.Config{         // Load your csv with the appropriate configuration
-  path: "file.csv",                        // Path of the csv file
-  dest: &tab,                              // A pointer to the create slice
-  separator: ';',                          // Optional - if your csv use something else than ',' to separate values
-  header: []string{"name", "ID", "number"} // Optional - if your csv does not contains a header
+tab := []Demo{}                             // Create the slice where to put the file content
+err  := csvtag.Load(csvtag.Config{          // Load your csv with the appropriate configuration
+  Path: "file.csv",                         // Path of the csv file
+  Dest: &tab,                               // A pointer to the create slice
+  Separator: ';',                           // Optional - if your csv use something else than ',' to separate values
+  Header: []string{"name", "ID", "number"}, // Optional - if your csv does not contains a header
 })
 ```
 
