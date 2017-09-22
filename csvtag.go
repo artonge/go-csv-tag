@@ -6,6 +6,7 @@ import (
 	"os"
 	"reflect"
 	"strconv"
+	"strings"
 )
 
 // Config struct to pass to the Load function
@@ -65,6 +66,7 @@ func readFile(path string, separator rune, header []string) (map[string]int, [][
 	// We need to read it all at once to have the number of records
 	reader := csv.NewReader(file) // Create the csv reader
 	reader.TrimLeadingSpace = true
+
 	if separator != 0 {
 		reader.Comma = separator
 	}
@@ -86,7 +88,7 @@ func readFile(path string, separator rune, header []string) (map[string]int, [][
 	}
 	headerMap := make(map[string]int) // Create map
 	for i, name := range rawHeader {
-		headerMap[name] = i
+		headerMap[strings.TrimSpace(name)] = i
 	}
 	// Return our header and content
 	return headerMap, content, nil
