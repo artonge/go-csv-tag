@@ -33,6 +33,17 @@ func TestValideFile(t *testing.T) {
 	}
 }
 
+func TestBadHeader(t *testing.T) {
+	tabT := []test{}
+	err := Load(Config{
+		Path: "csv_files/badHeader.csv",
+		Dest: &tabT,
+	})
+	if err != nil || checkValues(tabT) {
+		t.Fail()
+	}
+}
+
 func TestMissATag(t *testing.T) {
 	tabT := []testNoID{}
 	err := Load(Config{

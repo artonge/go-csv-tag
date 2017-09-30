@@ -6,6 +6,7 @@ import (
 	"os"
 	"reflect"
 	"strconv"
+	"strings"
 )
 
 // Config struct to pass to the Load function
@@ -28,7 +29,7 @@ type Config struct {
 // 		})
 // The 'separator' and 'header' properties of the config object are optionals
 // @param dest: object where to store the result
-// @return an error if one occure
+// @return an error if one occurs
 func Load(config Config) error {
 	header, content, err := readFile(config.Path, config.Separator, config.Header)
 	if err != nil {
@@ -65,6 +66,7 @@ func readFile(path string, separator rune, header []string) (map[string]int, [][
 	// We need to read it all at once to have the number of records
 	reader := csv.NewReader(file) // Create the csv reader
 	reader.TrimLeadingSpace = true
+
 	if separator != 0 {
 		reader.Comma = separator
 	}
@@ -79,14 +81,14 @@ func readFile(path string, separator rune, header []string) (map[string]int, [][
 	}
 	// Map each header name to its index
 	// This will be used in the mapping
-	// If there is no header in the config, treate first line as the header
+	// If there is no header in the config, treat first line as the header
 	rawHeader := header
 	if rawHeader == nil {
 		rawHeader = content[0]
 	}
 	headerMap := make(map[string]int) // Create map
 	for i, name := range rawHeader {
-		headerMap[name] = i
+		headerMap[strings.TrimSpace(name)] = i
 	}
 	// Return our header and content
 	return headerMap, content, nil
@@ -97,7 +99,7 @@ func readFile(path string, separator rune, header []string) (map[string]int, [][
 // @param content: the content to put in dest
 // @param dest: the destination where to put the file's content
 func mapToDest(header map[string]int, content [][]string, dest interface{}) error {
-	// Check destination is not nit
+	// Check destination is not nil
 	if dest == nil {
 		return fmt.Errorf("Destination slice is nil")
 	}
@@ -143,7 +145,7 @@ func mapToDest(header map[string]int, content [][]string, dest interface{}) erro
 // Make some parsing if needed
 // @param rawVal: the value, as a string, that we want to store
 // @param valRv: the reflected value where we want to store our value
-// @return an error if one occure
+// @return an error if one occurs
 func storeValue(rawVal string, valRv reflect.Value) error {
 	switch valRv.Kind() {
 	case reflect.String:
