@@ -14,6 +14,7 @@ Read csv file from go using tags
 `go get github.com/artonge/go-csv-tag`
 
 # Example
+## Load
 The csv file:
 ```csv
 name, ID, number
@@ -38,9 +39,37 @@ err  := csvtag.Load(csvtag.Config{          // Load your csv with the appropriat
 })
 ```
 
+## Dump
+You go code:
+```go
+type Demo struct {                         // A structure with tags
+	Name string  `csv:"name"`
+	ID   int     `csv:"ID"`
+	Num  float64 `csv:"number"`
+}
+
+tab := []Demo{                             // Create the slice where to put the file content
+	Demo{
+		Name: "some name",
+		ID: 1,
+		Num: 42.0,
+	},
+}
+
+err := csvtag.DumpToFile(tab, "csv_file_name.csv")
+```
+You can also dump the data into an io.Writer with
+```go
+err := csvtag.Dump(tab, yourIOWriter)
+```
+The csv file written:
+```csv
+name, ID, number
+some name, 1, 42.0
+```
+
 # Contribute
 Pull requests are welcome ! :)
 
 ## TODO
-- [ ] Add `Dump(data interface{}, file string) error` function to write some datas the disk with csv format
 - [ ] Update `Load` to also match csv fields with property name (case sensitive and lowercases) 
