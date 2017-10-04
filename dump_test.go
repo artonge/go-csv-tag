@@ -85,3 +85,26 @@ func TestDumpBadInput(t *testing.T) {
 		t.Errorf("Was able to pass bad input into dump")
 	}
 }
+
+type Demo struct {                         // A structure with tags
+	Name string  `csv:"name"`
+	ID   int     `csv:"ID"`
+	Num  float64 `csv:"number"`
+}
+
+func TestREADMEExample(t * testing.T) {
+
+	tab := []Demo{                             // Create the slice where to put the file content
+		Demo{
+			Name: "some name",
+			ID: 1,
+			Num: 42.0,
+		},
+	}
+
+	err := csvtag.DumpToFile(tab, "csv_file_name.csv")
+	
+	if err != nil {
+		t.Fail()
+	}
+}
