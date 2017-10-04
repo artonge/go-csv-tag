@@ -9,7 +9,24 @@ import (
 const (
 	TESTSTRUCT     = "header1,header2,header3\nline1,1,1.2\nline2,2,2.3\nline3,3,3.4"
 	TESTNOIDSTRUCT = "header1,header\nline1,0\nline2,0\nline3,0"
+	FILEERROR      = "open : no such file or directory"
 )
+
+func TestDumpToFileError(t *testing.T) {
+	tabT := []test{}
+	err := Load(Config{
+		Path: "csv_files/valid.csv",
+		Dest: &tabT,
+	})
+	if err != nil {
+		t.Fail()
+	}
+
+	err = DumpToFile(tabT, "")
+	if strings.Compare(err.Error(), FILEERROR) != 0 {
+		t.Fail()
+	}
+}
 
 func TestDumpTestStruct(t *testing.T) {
 	tabT := []test{}

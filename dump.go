@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"os"
 	"reflect"
 	"strings"
 )
@@ -59,6 +60,21 @@ func inSlice(s []string, item string) bool {
 		}
 	}
 	return result
+}
+
+//DumpToFile - writes dat to a file
+//@param data: An object typically of the form []struct, where the struct using csv tag
+//@param filePath: The file path string of where you want the file to be created
+func DumpToFile(data interface{}, filePath string) error {
+	//Create file object
+	file, err := os.Create(filePath)
+	if err != nil {
+		return err
+	}
+
+	//Dump data to file
+	err = Dump(data, file)
+	return err
 }
 
 //Dump - writes data to an io.Writer
