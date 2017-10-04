@@ -102,7 +102,7 @@ func TestREADMEExample(t * testing.T) {
 		},
 	}
 
-	err := csvtag.DumpToFile(tab, "csv_file_name.csv")
+	err := DumpToFile(tab, "csv_file_name.csv")
 	
 	if err != nil {
 		t.Fail()
