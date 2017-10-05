@@ -2,7 +2,7 @@ package csvtag
 
 import (
 	"bytes"
-	"strings"
+	"fmt"
 	"testing"
 )
 
@@ -12,98 +12,90 @@ const (
 	FILEERROR      = "open : no such file or directory"
 )
 
-func TestDumpToFileError(t *testing.T) {
-	tabT := []test{}
-	err := Load(Config{
-		Path: "csv_files/valid.csv",
-		Dest: &tabT,
-	})
-	if err != nil {
-		t.Fail()
-	}
+var tabTest = []test{
+	test{"name", 1, 42.5},
+}
 
-	err = DumpToFile(tabT, "")
-	if strings.Compare(err.Error(), FILEERROR) != 0 {
+var tabTestNoID = []testNoID{
+	testNoID{"name", 1, 42.5},
+}
+
+func TestDumpToFileEmptyName(t *testing.T) {
+	err := DumpToFile(tabTest, "")
+	if err == nil {
 		t.Fail()
 	}
 }
 
 func TestDumpTestStruct(t *testing.T) {
-	tabT := []test{}
-	err := Load(Config{
-		Path: "csv_files/valid.csv",
-		Dest: &tabT,
-	})
+	buffer := bytes.Buffer{}
+
+	err := Dump(tabTest, &buffer)
 	if err != nil {
+		fmt.Println(err)
 		t.Fail()
 	}
 
-	b := &bytes.Buffer{}
-
-	err = Dump(tabT, b)
-	if err != nil {
-		t.Fail()
-	}
-
-	out := b.String()
-	if strings.Contains(out, TESTSTRUCT) != true {
+	if buffer.String() != "header1,header2,header3\nname,1,42.5\n" {
+		fmt.Println(buffer.String())
 		t.Fail()
 	}
 }
 
 func TestDumpTestNoIdStruct(t *testing.T) {
-	tabT := []testNoID{}
-	err := Load(Config{
-		Path: "csv_files/valid.csv",
-		Dest: &tabT,
-	})
+	buffer := bytes.Buffer{}
+
+	err := Dump(tabTestNoID, &buffer)
 	if err != nil {
 		t.Fail()
 	}
 
-	b := &bytes.Buffer{}
+	if buffer.String() != "header1,header\nname,42.5\n" {
+		fmt.Println(buffer.String())
+		t.Fail()
+	}
+}
 
-	err = Dump(tabT, b)
+func TestEmptyDump(t *testing.T) {
+	buffer := bytes.Buffer{}
+
+	err := Dump([]test{}, &buffer)
 	if err != nil {
 		t.Fail()
 	}
 
-	out := b.String()
-
-	if strings.Contains(out, TESTNOIDSTRUCT) != true {
+	if buffer.String() != "header1,header2,header3\n" {
+		fmt.Println(buffer.String())
 		t.Fail()
 	}
 }
 
-func TestDumpBadInput(t *testing.T) {
-	badInput := "Bad Input"
-	b := &bytes.Buffer{}
-
-	err := Dump(badInput, b)
-
-	if strings.Compare(err.Error(), UNSUPPORTED) != 0 {
-		t.Errorf("Was able to pass bad input into dump")
+func TestWrongType(t *testing.T) {
+	buffer := bytes.Buffer{}
+	err := Dump(2, &buffer)
+	if err == nil {
+		t.Fail()
 	}
 }
 
-type Demo struct {                         // A structure with tags
+type Demo struct { // A structure with tags
 	Name string  `csv:"name"`
 	ID   int     `csv:"ID"`
 	Num  float64 `csv:"number"`
 }
 
-func TestREADMEExample(t * testing.T) {
+func TestREADMEExample(t *testing.T) {
 
-	tab := []Demo{                             // Create the slice where to put the file content
+	tab := []Demo{ // Create the slice where to put the file content
 		Demo{
 			Name: "some name",
-			ID: 1,
-			Num: 42.0,
+			ID:   1,
+			Num:  42.5,
 		},
 	}
 
-	err := DumpToFile(tab, "csv_file_name.csv")
-	
+	err := DumpToFile(tab, "csv_files/csv_file_name.csv")
+
 	if err != nil {
 		t.Fail()
 	}
