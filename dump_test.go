@@ -90,11 +90,11 @@ func TestREADMEExample(t *testing.T) {
 		Demo{
 			Name: "some name",
 			ID:   1,
-			Num:  42.0,
+			Num:  42.5,
 		},
 	}
 
-	err := DumpToFile(tab, "csv_file_name.csv")
+	err := DumpToFile(tab, "csv_files/csv_file_name.csv")
 
 	if err != nil {
 		t.Fail()
