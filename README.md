@@ -8,7 +8,7 @@ Read csv file from go using tags
 [![goreportcard for artonge/go-csv-tag](https://goreportcard.com/badge/github.com/artonge/go-csv-tag)](https://goreportcard.com/report/artonge/go-csv-tag)
 
 [![Sourcegraph for artonge/go-csv-tag](https://sourcegraph.com/github.com/artonge/go-csv-tag/-/badge.svg)](https://sourcegraph.com/github.com/artonge/go-csv-tag?badge)
-
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) 
 
 # Install
 `go get github.com/artonge/go-csv-tag`
@@ -67,9 +67,6 @@ The csv file written:
 name,ID,number
 some name,1,42.5
 ```
-
-# Contribute
-Pull requests are welcome ! :)
 
 ## TODO
 - [ ] Update `Load` to also match csv fields with property name (case sensitive and lowercases)
