@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 	"reflect"
+	"strconv"
 )
 
 // DumpToFile - writes a slice content into a file specified by filePath
@@ -55,7 +56,12 @@ func Dump(slice interface{}, writer io.Writer) error {
 		fields := reflectedValue.Index(i).NumField()
 		for j := 0; j < fields; j++ {
 			if reflectedValue.Index(i).Type().Field(j).Tag.Get("csv") != "" {
-				itemData = append(itemData, fmt.Sprint(reflectedValue.Index(i).Field(j)))
+				switch reflectedValue.Index(i).Type().Field(j).Type.Kind() {
+				case reflect.Float64, reflect.Float32:
+					itemData = append(itemData, strconv.FormatFloat(reflectedValue.Index(i).Field(j).Float(), 'f', -1, 64))
+				default:
+					itemData = append(itemData, fmt.Sprint(reflectedValue.Index(i).Field(j)))
+				}
 			}
 		}
 		// Write the line into io.Writer
