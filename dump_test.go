@@ -50,6 +50,45 @@ func TestDumpTestNoIdStruct(t *testing.T) {
 	}
 }
 
+func TestDumpTestStructPointer(t *testing.T) {
+	buffer := bytes.Buffer{}
+
+	err := Dump(&tabTest, &buffer)
+	if err != nil {
+		fmt.Println(err)
+		t.Fail()
+	}
+
+	if buffer.String() != "header1,header2,header3\nname,1,42.5\n" {
+		fmt.Println(buffer.String())
+		t.Fail()
+	}
+}
+
+func TestDumpTestNoIdStructPointer(t *testing.T) {
+	buffer := bytes.Buffer{}
+
+	err := Dump(&tabTestNoID, &buffer)
+	if err != nil {
+		t.Fail()
+	}
+
+	if buffer.String() != "header1,header\nname,42.5\n" {
+		fmt.Println(buffer.String())
+		t.Fail()
+	}
+}
+
+func TestDumpNilPointer(t *testing.T) {
+	buffer := bytes.Buffer{}
+
+	var n *test
+	err := Dump(n, &buffer)
+	if err == nil {
+		t.Fail()
+	}
+}
+
 func TestEmptyDump(t *testing.T) {
 	buffer := bytes.Buffer{}
 
