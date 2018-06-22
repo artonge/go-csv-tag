@@ -31,6 +31,11 @@ func DumpToFile(slice interface{}, filePath string) error {
 func Dump(slice interface{}, writer io.Writer) error {
 	// Determines the type of the elements of the passed slice
 	reflectedValue := reflect.ValueOf(slice)
+
+	// If slice is a pointer, get the value it points to
+	// (if it isn't, Indirect() does nothing and returns the value it was called with)
+	reflectedValue = reflect.Indirect(reflectedValue)
+
 	// Return when slice is not a slice
 	if reflectedValue.Kind() != reflect.Array && reflectedValue.Kind() != reflect.Slice {
 		return errors.New("Unsupported data type")
