@@ -59,7 +59,7 @@ func TestDumpTestStructPointer(t *testing.T) {
 		t.Fail()
 	}
 
-	if buffer.String() != "header1,header2,header3\nname,1,42.5\n" {
+	if buffer.String() != "header1,header2,header3\nname,1,0.000001\n" {
 		fmt.Println(buffer.String())
 		t.Fail()
 	}
@@ -73,7 +73,7 @@ func TestDumpTestNoIdStructPointer(t *testing.T) {
 		t.Fail()
 	}
 
-	if buffer.String() != "header1,header\nname,42.5\n" {
+	if buffer.String() != "header1,header\nname,0.000001\n" {
 		fmt.Println(buffer.String())
 		t.Fail()
 	}
