@@ -67,6 +67,3 @@ The csv file written:
 name,ID,number
 some name,1,42.5
 ```
-
-## TODO
-- [ ] Update `Load` to also match csv fields with property name (case sensitive and lowercases)
