@@ -11,7 +11,7 @@ Read csv file from go using tags
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
 # Install
-`go get github.com/artonge/go-csv-tag`
+`go get github.com/artonge/go-csv-tag/v2`
 
 # Example
 ## Load
