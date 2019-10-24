@@ -47,7 +47,7 @@ csvtag.LoadFromPath(youReader, &tab)
 
 Or from a string with:
 ```go
-csvtag.LoadFromPath(yourString, &tab)
+csvtag.LoadFromString(yourString, &tab)
 ```
 
 ## Dump
