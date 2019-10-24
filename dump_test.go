@@ -24,7 +24,7 @@ func TestDumpToFileEmptyName(t *testing.T) {
 func TestDumpTestStruct(t *testing.T) {
 	buffer := bytes.Buffer{}
 
-	err := Dump(tabTest, &buffer)
+	err := DumpToWriter(tabTest, &buffer)
 	if err != nil {
 		fmt.Println(err)
 		t.Fail()
@@ -39,7 +39,7 @@ func TestDumpTestStruct(t *testing.T) {
 func TestDumpTestNoIdStruct(t *testing.T) {
 	buffer := bytes.Buffer{}
 
-	err := Dump(tabTestNoID, &buffer)
+	err := DumpToWriter(tabTestNoID, &buffer)
 	if err != nil {
 		t.Fail()
 	}
@@ -53,7 +53,7 @@ func TestDumpTestNoIdStruct(t *testing.T) {
 func TestDumpTestStructPointer(t *testing.T) {
 	buffer := bytes.Buffer{}
 
-	err := Dump(&tabTest, &buffer)
+	err := DumpToWriter(&tabTest, &buffer)
 	if err != nil {
 		fmt.Println(err)
 		t.Fail()
@@ -68,7 +68,7 @@ func TestDumpTestStructPointer(t *testing.T) {
 func TestDumpTestNoIdStructPointer(t *testing.T) {
 	buffer := bytes.Buffer{}
 
-	err := Dump(&tabTestNoID, &buffer)
+	err := DumpToWriter(&tabTestNoID, &buffer)
 	if err != nil {
 		t.Fail()
 	}
@@ -83,16 +83,16 @@ func TestDumpNilPointer(t *testing.T) {
 	buffer := bytes.Buffer{}
 
 	var n *test
-	err := Dump(n, &buffer)
+	err := DumpToWriter(n, &buffer)
 	if err == nil {
 		t.Fail()
 	}
 }
 
-func TestEmptyDump(t *testing.T) {
+func TestEmptyDumpToWriter(t *testing.T) {
 	buffer := bytes.Buffer{}
 
-	err := Dump([]test{}, &buffer)
+	err := DumpToWriter([]test{}, &buffer)
 	if err != nil {
 		t.Fail()
 	}
@@ -105,7 +105,7 @@ func TestEmptyDump(t *testing.T) {
 
 func TestWrongType(t *testing.T) {
 	buffer := bytes.Buffer{}
-	err := Dump(2, &buffer)
+	err := DumpToWriter(2, &buffer)
 	if err == nil {
 		t.Fail()
 	}
@@ -113,7 +113,7 @@ func TestWrongType(t *testing.T) {
 
 func TestBigFloat(t *testing.T) {
 	buffer := bytes.Buffer{}
-	err := Dump(2, &buffer)
+	err := DumpToWriter(2, &buffer)
 	if err == nil {
 		t.Fail()
 	}
@@ -140,4 +140,20 @@ func TestREADMEExample(t *testing.T) {
 	if err != nil {
 		t.Fail()
 	}
+}
+
+func TestDumpWithSemicolon(t *testing.T) {
+	buffer := bytes.Buffer{}
+
+	err := DumpToWriter(tabTest, &buffer, CsvOptions{Separator: ';'})
+	if err != nil {
+		fmt.Println(err)
+		t.Fail()
+	}
+
+	if buffer.String() != "header1;header2;header3\nname;1;0.000001\n" {
+		fmt.Println(buffer.String())
+		t.Fail()
+	}
+
 }
