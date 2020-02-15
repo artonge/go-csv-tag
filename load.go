@@ -192,6 +192,7 @@ func mapToDestination(header []string, content [][]string, destination interface
 // @param valRv: the reflected value where we want to store our value.
 // @return an error if one occurs.
 func storeValue(rawValue string, valRv reflect.Value) error {
+	rawValue = strings.TrimSpace(rawValue)
 	switch valRv.Kind() {
 	case reflect.String:
 		valRv.SetString(rawValue)
@@ -201,7 +202,6 @@ func storeValue(rawValue string, valRv reflect.Value) error {
 		value, err := strconv.ParseInt(rawValue, 10, 64)
 		if err != nil && rawValue != "" {
 			return fmt.Errorf("error parsing int '%v':\n	==> %v", rawValue, err)
-
 		}
 		valRv.SetInt(value)
 	case reflect.Float64:
