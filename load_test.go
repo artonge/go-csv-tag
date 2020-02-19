@@ -79,6 +79,14 @@ func TestWithSemicolon(t *testing.T) {
 	}
 }
 
+func TestWithTrailingSpaces(t *testing.T) {
+	tabT := []test{}
+	err := LoadFromPath("csv_files/trailingSpaces.csv", &tabT)
+	if err != nil || checkValues(tabT) {
+		t.Fail()
+	}
+}
+
 func TestToMutchOptions(t *testing.T) {
 	tabT := []test{}
 	err := LoadFromPath(
