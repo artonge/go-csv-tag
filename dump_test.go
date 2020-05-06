@@ -7,11 +7,11 @@ import (
 )
 
 var tabTest = []test{
-	test{"name", 1, 0.000001},
+	{"name", 1, 0.000001},
 }
 
 var tabTestNoID = []testNoID{
-	testNoID{"name", 1, 0.000001},
+	{"name", 1, 0.000001},
 }
 
 func TestDumpToFileEmptyName(t *testing.T) {
@@ -128,7 +128,7 @@ type Demo struct { // A structure with tags
 func TestREADMEExample(t *testing.T) {
 
 	tab := []Demo{ // Create the slice where to put the file content
-		Demo{
+		{
 			Name: "some name",
 			ID:   1,
 			Num:  0.000001,
