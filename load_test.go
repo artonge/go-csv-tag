@@ -14,6 +14,11 @@ type testNoID struct {
 	Num  float64 `csv:"header"`
 }
 
+type testBool struct {
+	Name  string `csv:"header1"`
+	ABool bool   `csv:"header2"`
+}
+
 // Check the values are correct
 func checkValues(tabT []test) bool {
 	return false ||
@@ -22,10 +27,25 @@ func checkValues(tabT []test) bool {
 		tabT[2].Name != "line3" || tabT[2].ID != 3 || tabT[2].Num != 3.4
 }
 
+func checkBoolValues(tabT []testBool) bool {
+	return false ||
+		tabT[0].Name != "line1" || tabT[0].ABool != true ||
+		tabT[1].Name != "line2" || tabT[1].ABool != false ||
+		tabT[2].Name != "line3" || tabT[2].ABool != false
+}
+
 func TestValideFile(t *testing.T) {
 	tabT := []test{}
 	err := LoadFromPath("csv_files/valid.csv", &tabT)
 	if err != nil || checkValues(tabT) {
+		t.Fail()
+	}
+}
+
+func TestBool(t *testing.T) {
+	tabT := []testBool{}
+	err := LoadFromPath("csv_files/bool.csv", &tabT)
+	if err != nil || checkBoolValues(tabT) {
 		t.Fail()
 	}
 }

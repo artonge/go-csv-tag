@@ -210,6 +210,12 @@ func storeValue(rawValue string, valRv reflect.Value) error {
 			return fmt.Errorf("error parsing float '%v':\n	==> %v", rawValue, err)
 		}
 		valRv.SetFloat(value)
+	case reflect.Bool:
+		value, err := strconv.ParseBool(rawValue)
+		if err != nil && rawValue != "" {
+			return fmt.Errorf("error parsing bool '%v':\n	==> %v", rawValue, err)
+		}
+		valRv.SetBool(value)
 	}
 
 	return nil
