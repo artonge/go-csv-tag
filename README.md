@@ -49,7 +49,7 @@ err  := csvtag.LoadFromPath(
 You can also load the data from an io.Reader with:
 
 ```go
-csvtag.LoadFromPath(youReader, &tab)
+csvtag.LoadFromReader(youReader, &tab)
 ```
 
 Or from a string with:
