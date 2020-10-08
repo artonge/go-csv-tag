@@ -1,14 +1,17 @@
 # go-csv-tag
 
-Read csv file from go using tags
+Read csv file from Go using tags
 
 [![godoc for artonge/go-csv-tag](https://godoc.org/github.com/artonge/go-csv-tag?status.svg)](http://godoc.org/github.com/artonge/go-csv-tag)
 
 ![Go](https://github.com/artonge/go-csv-tag/workflows/Go/badge.svg)
 [![goreportcard for artonge/go-csv-tag](https://goreportcard.com/badge/github.com/artonge/go-csv-tag)](https://goreportcard.com/report/artonge/go-csv-tag)
 
-[![Sourcegraph for artonge/go-csv-tag](https://sourcegraph.com/github.com/artonge/go-csv-tag/-/badge.svg)](https://sourcegraph.com/github.com/artonge/go-csv-tag?badge)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+
+**The project is in maintenance mode.**
+
+It is kept compatible with changes in the Go ecosystem but no new features will be developed. PR could be accepted.
 
 # Install
 
@@ -27,7 +30,7 @@ name2, 2, 2.3
 name3, 3, 3.4
 ```
 
-Your go code:
+Your Go code:
 
 ```go
 type Demo struct {                                // A structure with tags
@@ -60,7 +63,7 @@ csvtag.LoadFromString(yourString, &tab)
 
 ## Dump
 
-You go code:
+Your Go code:
 
 ```go
 type Demo struct {                         // A structure with tags
