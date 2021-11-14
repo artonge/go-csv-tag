@@ -204,6 +204,8 @@ func storeValue(rawValue string, valRv reflect.Value) error {
 			return fmt.Errorf("error parsing int '%v':\n	==> %v", rawValue, err)
 		}
 		valRv.SetInt(value)
+	case reflect.Float32:
+		fallthrough
 	case reflect.Float64:
 		value, err := strconv.ParseFloat(rawValue, 64)
 		if err != nil && rawValue != "" {
