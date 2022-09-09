@@ -35,7 +35,9 @@ func LoadFromReader(file io.Reader, destination interface{}, options ...CsvOptio
 		option = options[0]
 	}
 
-	header, content, err := readFile(file, option.Separator, option.Header)
+	reader := createFileReader(file, option)
+
+	header, content, err := readFile(reader, option.Header)
 	if err != nil {
 		return fmt.Errorf("error reading csv from io.Reader: %v", err)
 	}
@@ -51,6 +53,17 @@ func LoadFromReader(file io.Reader, destination interface{}, options ...CsvOptio
 	}
 
 	return nil
+}
+
+func createFileReader(file io.Reader, option CsvOptions) *csv.Reader {
+	reader := csv.NewReader(file)
+	reader.TrimLeadingSpace = true
+	reader.LazyQuotes = option.LazyQuote
+
+	if option.Separator != 0 {
+		reader.Comma = option.Separator
+	}
+	return reader
 }
 
 // LoadFromPath - Load csv from a path and put it in a array of the destination's type using tags.
@@ -106,15 +119,7 @@ func LoadFromString(str string, destination interface{}, options ...CsvOptions) 
 // @param file: the io.Reader to read from.
 // @param separator: the separator used in the csv file.
 // @param header: the optional header if the file does not contain one.
-func readFile(file io.Reader, separator rune, header []string) ([]string, [][]string, error) {
-	// Create and configure the csv reader.
-	reader := csv.NewReader(file)
-	reader.TrimLeadingSpace = true
-
-	if separator != 0 {
-		reader.Comma = separator
-	}
-
+func readFile(reader *csv.Reader, header []string) ([]string, [][]string, error) {
 	// We need to read it all at once to have the number of records for the array creation.
 	content, err := reader.ReadAll()
 	if err != nil {

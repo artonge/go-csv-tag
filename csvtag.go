@@ -4,4 +4,5 @@ package csvtag
 type CsvOptions struct {
 	Separator rune
 	Header    []string
+	LazyQuote bool
 }

@@ -157,3 +157,31 @@ func TestNoDist(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestLazyQuotes(t *testing.T) {
+
+	type testQuote struct {
+		Name  string `csv:"name"`
+		ABool bool   `csv:"flag"`
+	}
+
+	type quotes []testQuote
+
+	data := quotes{}
+	err := LoadFromPath("csv_files/lazy_quotes.csv", &data,
+		CsvOptions{Separator: '|',
+			Header: []string{
+				"name",
+				"flag",
+			},
+			LazyQuote: true})
+	if err != nil {
+		t.Errorf("read failed with an error: %s", err.Error())
+	}
+	if len(data) != 1 {
+		t.Error("Expected one row read")
+	}
+	if data[0].Name != "a content with \" \" chars" {
+		t.Error("Received unexpected file content")
+	}
+}
