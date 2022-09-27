@@ -1,6 +1,8 @@
 package csvtag
 
-import "testing"
+import (
+	"testing"
+)
 
 type test struct {
 	Name string  `csv:"header1"`
@@ -19,6 +21,11 @@ type testBool struct {
 	ABool bool   `csv:"header2"`
 }
 
+type testF32 struct {
+	Name string  `csv:"header1"`
+	Num  float32 `csv:"header2"`
+}
+
 // Check the values are correct
 func checkValues(tabT []test) bool {
 	return false ||
@@ -34,6 +41,12 @@ func checkBoolValues(tabT []testBool) bool {
 		tabT[2].Name != "line3" || tabT[2].ABool != false
 }
 
+func checkFloat32Values(tabT []testF32) bool {
+	return false ||
+		tabT[0].Name != "line1" || tabT[0].Num != 1.2 ||
+		tabT[1].Name != "line2" || tabT[1].Num != 2.3
+}
+
 func TestValideFile(t *testing.T) {
 	tabT := []test{}
 	err := LoadFromPath("csv_files/valid.csv", &tabT)
@@ -46,6 +59,14 @@ func TestBool(t *testing.T) {
 	tabT := []testBool{}
 	err := LoadFromPath("csv_files/bool.csv", &tabT)
 	if err != nil || checkBoolValues(tabT) {
+		t.Fail()
+	}
+}
+
+func TestF32(t *testing.T) {
+	tabT := []testF32{}
+	err := LoadFromPath("csv_files/float32.csv", &tabT)
+	if err != nil || checkFloat32Values(tabT) {
 		t.Fail()
 	}
 }
