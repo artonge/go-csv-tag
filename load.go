@@ -196,6 +196,12 @@ func storeValue(rawValue string, valRv reflect.Value) error {
 	switch valRv.Kind() {
 	case reflect.String:
 		valRv.SetString(rawValue)
+	case reflect.Uint32:
+		value, err := strconv.ParseUint(rawValue, 10, 64)
+		if err != nil && rawValue != "" {
+			return fmt.Errorf("error parsing uint '%v':\n	==> %v", rawValue, err)
+		}
+		valRv.SetUint(value)
 	case reflect.Int64:
 		fallthrough
 	case reflect.Int:
