@@ -12,15 +12,17 @@ import (
 
 // LoadFromReader - Load csv from an io.Reader and put it in a array of the destination's type using tags.
 // Example:
-// 	tabOfMyStruct := []MyStruct{}
-// 	err  := Load(
-// 				myIoReader,
-// 				&tabOfMyStruct,
-// 				CsvOptions{
-// 					Separator: ';',
-// 					Header: []string{"header1", "header2", "header3"
-// 				}
-// 			})
+//
+//	tabOfMyStruct := []MyStruct{}
+//	err  := Load(
+//				myIoReader,
+//				&tabOfMyStruct,
+//				CsvOptions{
+//					Separator: ';',
+//					Header: []string{"header1", "header2", "header3"
+//				}
+//			})
+//
 // @param file: the io.Reader.
 // @param destination: object where to store the result.
 // @param options (optional): options for the csv parsing.
@@ -55,15 +57,17 @@ func LoadFromReader(file io.Reader, destination interface{}, options ...CsvOptio
 
 // LoadFromPath - Load csv from a path and put it in a array of the destination's type using tags.
 // Example:
-// 	tabOfMyStruct := []MyStruct{}
-// 	err  := Load(
-// 				"my_csv_file.csv",
-// 				&tabOfMyStruct,
-// 				CsvOptions{
-// 					Separator: ';',
-// 					Header: []string{"header1", "header2", "header3"
-// 				}
-// 			})
+//
+//	tabOfMyStruct := []MyStruct{}
+//	err  := Load(
+//				"my_csv_file.csv",
+//				&tabOfMyStruct,
+//				CsvOptions{
+//					Separator: ';',
+//					Header: []string{"header1", "header2", "header3"
+//				}
+//			})
+//
 // @param path: the path of the csv file.
 // @param destination: object where to store the result.
 // @param options (optional): options for the csv parsing.
@@ -85,15 +89,17 @@ func LoadFromPath(path string, destination interface{}, options ...CsvOptions) e
 
 // LoadFromString - Load csv from string and put it in a array of the destination's type using tags.
 // Example:
-// 	tabOfMyStruct := []MyStruct{}
-// 	err  := Load(
-// 				myString,
-// 				&tabOfMyStruct,
-// 				CsvOptions{
-// 					Separator: ';',
-// 					Header: []string{"header1", "header2", "header3"
-// 				}
-// 			})
+//
+//	tabOfMyStruct := []MyStruct{}
+//	err  := Load(
+//				myString,
+//				&tabOfMyStruct,
+//				CsvOptions{
+//					Separator: ';',
+//					Header: []string{"header1", "header2", "header3"
+//				}
+//			})
+//
 // @param str: the string.
 // @param destination: object where to store the result.
 // @param options (optional): options for the csv parsing.
@@ -196,6 +202,18 @@ func storeValue(rawValue string, valRv reflect.Value) error {
 	switch valRv.Kind() {
 	case reflect.String:
 		valRv.SetString(rawValue)
+	case reflect.Uint32:
+		fallthrough
+	case reflect.Uint64:
+		fallthrough
+	case reflect.Uint:
+		value, err := strconv.ParseUint(rawValue, 10, 64)
+		if err != nil && rawValue != "" {
+			return fmt.Errorf("error parsing uint '%v':\n	==> %v", rawValue, err)
+		}
+		valRv.SetUint(value)
+	case reflect.Int32:
+		fallthrough
 	case reflect.Int64:
 		fallthrough
 	case reflect.Int:
