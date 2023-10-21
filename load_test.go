@@ -55,6 +55,14 @@ func TestValideFile(t *testing.T) {
 	}
 }
 
+func TestValideFileWithBOM(t *testing.T) {
+	tabT := []test{}
+	err := LoadFromPath("csv_files/valid_bom.csv", &tabT)
+	if err != nil || checkValues(tabT) {
+		t.Fail()
+	}
+}
+
 func TestBool(t *testing.T) {
 	tabT := []testBool{}
 	err := LoadFromPath("csv_files/bool.csv", &tabT)
