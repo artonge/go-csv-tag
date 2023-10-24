@@ -1,6 +1,7 @@
 package csvtag
 
 import (
+	"bytes"
 	"encoding/csv"
 	"fmt"
 	"io"
@@ -113,6 +114,8 @@ func LoadFromString(str string, destination interface{}, options ...CsvOptions) 
 // @param separator: the separator used in the csv file.
 // @param header: the optional header if the file does not contain one.
 func readFile(file io.Reader, separator rune, header []string) ([]string, [][]string, error) {
+	file = skipBOM(file)
+
 	// Create and configure the csv reader.
 	reader := csv.NewReader(file)
 	reader.TrimLeadingSpace = true
@@ -139,6 +142,24 @@ func readFile(file io.Reader, separator rune, header []string) ([]string, [][]st
 	}
 
 	return header, content, nil
+}
+
+// Skip the Byte Order Mark (BOM) if it exists.
+// @param file: the io.Reader to read from.
+func skipBOM(file io.Reader) io.Reader {
+	// Read the first 3 bytes.
+	bom := make([]byte, 3)
+	_, err := file.Read(bom)
+	if err != nil {
+		return file
+	}
+
+	// If the first 3 bytes are not the BOM, reset the reader.
+	if bom[0] != 0xEF || bom[1] != 0xBB || bom[2] != 0xBF {
+		return io.MultiReader(bytes.NewReader(bom), file)
+	}
+
+	return file
 }
 
 // Map the provided content to the destination using the header and the tags.
