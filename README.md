@@ -46,6 +46,7 @@ err  := csvtag.LoadFromPath(
 	csvtag.CsvOptions{                            // Load your csv with optional options
 		Separator: ';',                           // changes the values separator, default to ','
 		Header: []string{"name", "ID", "number"}, // specify custom headers
+		TagKey: "csv",                            // specify a custom tag key, default is 'csv'
 })
 ```
 
