@@ -39,7 +39,7 @@ func LoadFromReader(file io.Reader, destination interface{}, options ...CsvOptio
 	}
 
 	if option.TagKey == "" {
-		option.TagKey = "csv"
+		option.TagKey = DefaultTagKey
 	}
 
 	header, content, err := readFile(file, option.Separator, option.Header)

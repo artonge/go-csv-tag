@@ -6,3 +6,5 @@ type CsvOptions struct {
 	Header    []string
 	TagKey    string
 }
+
+const DefaultTagKey string = "csv"

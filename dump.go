@@ -31,7 +31,7 @@ func DumpToWriter(slice interface{}, writer io.Writer, options ...CsvOptions) er
 	}
 
 	if option.TagKey == "" {
-		option.TagKey = "csv"
+		option.TagKey = DefaultTagKey
 	}
 
 	// Generate the header.
