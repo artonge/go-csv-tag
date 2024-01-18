@@ -30,10 +30,14 @@ func DumpToWriter(slice interface{}, writer io.Writer, options ...CsvOptions) er
 		option = options[0]
 	}
 
+	if option.TagKey == "" {
+		option.TagKey = "csv"
+	}
+
 	// Generate the header.
 	if option.Header == nil {
 		for i := 0; i < reflectedValue.Type().Elem().NumField(); i++ {
-			name := reflectedValue.Type().Elem().Field(i).Tag.Get("csv")
+			name := reflectedValue.Type().Elem().Field(i).Tag.Get(option.TagKey)
 			if name != "" {
 				option.Header = append(option.Header, name)
 			}
@@ -58,7 +62,7 @@ func DumpToWriter(slice interface{}, writer io.Writer, options ...CsvOptions) er
 		for j := 0; j < reflectedValue.Type().Elem().NumField(); j++ {
 			valueRv := reflectedValue.Index(i)
 			value := valueRv.Field(j)
-			tag := valueRv.Type().Field(j).Tag.Get("csv")
+			tag := valueRv.Type().Field(j).Tag.Get(option.TagKey)
 
 			if tag == "" {
 				continue

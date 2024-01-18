@@ -38,6 +38,10 @@ func LoadFromReader(file io.Reader, destination interface{}, options ...CsvOptio
 		option = options[0]
 	}
 
+	if option.TagKey == "" {
+		option.TagKey = "csv"
+	}
+
 	header, content, err := readFile(file, option.Separator, option.Header)
 	if err != nil {
 		return fmt.Errorf("error reading csv from io.Reader: %v", err)
@@ -48,7 +52,7 @@ func LoadFromReader(file io.Reader, destination interface{}, options ...CsvOptio
 		return nil
 	}
 
-	err = mapToDestination(header, content, destination)
+	err = mapToDestination(header, content, destination, option.TagKey)
 	if err != nil {
 		return fmt.Errorf("error mapping the content to the destination\n	==> %v", err)
 	}
@@ -166,7 +170,7 @@ func skipBOM(file io.Reader) io.Reader {
 // @param header: the csv header to match with the struct's tags.
 // @param content: the content to put in destination.
 // @param destination: the destination where to put the file's content.
-func mapToDestination(header []string, content [][]string, destination interface{}) error {
+func mapToDestination(header []string, content [][]string, destination interface{}, tagKey string) error {
 	if destination == nil {
 		return fmt.Errorf("destination slice is nil")
 	}
@@ -192,7 +196,7 @@ func mapToDestination(header []string, content [][]string, destination interface
 		emptyStruct := sliceRv.Index(i)
 
 		for j := 0; j < emptyStruct.NumField(); j++ {
-			propertyTag := emptyStruct.Type().Field(j).Tag.Get("csv")
+			propertyTag := emptyStruct.Type().Field(j).Tag.Get(tagKey)
 			if propertyTag == "" {
 				continue
 			}

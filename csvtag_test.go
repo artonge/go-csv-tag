@@ -25,3 +25,24 @@ func TestDumpAndLoad(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestDumpAndLoadTagKey(t *testing.T) {
+	str, err := DumpToString(tabTestTagKey, CsvOptions{TagKey: "json"})
+	if err != nil {
+		fmt.Println(err)
+		t.Fail()
+	}
+
+	tabT := []testTagKey{}
+	err = LoadFromString(str, &tabT, CsvOptions{TagKey: "json"})
+	if err != nil {
+		fmt.Println(err)
+		t.Fail()
+	}
+
+	if tabT[0].ID != tabTestTagKey[0].ID ||
+		tabT[0].Name != tabTestTagKey[0].Name ||
+		tabT[0].Num != tabTestTagKey[0].Num {
+		t.Fail()
+	}
+}
