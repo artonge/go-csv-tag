@@ -10,6 +10,12 @@ type test struct {
 	Num  float64 `csv:"header3"`
 }
 
+type testTagKey struct {
+	Name string  `json:"header1"`
+	ID   int     `json:"header2"`
+	Num  float64 `json:"header3"`
+}
+
 type testNoID struct {
 	Name string `csv:"header1"`
 	ID   int

@@ -10,6 +10,10 @@ var tabTest = []test{
 	{"name", 1, 0.000001},
 }
 
+var tabTestTagKey = []testTagKey{
+	{"name", 1, 0.000001},
+}
+
 var tabTestNoID = []testNoID{
 	{"name", 1, 0.000001},
 }

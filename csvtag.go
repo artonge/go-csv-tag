@@ -4,4 +4,7 @@ package csvtag
 type CsvOptions struct {
 	Separator rune
 	Header    []string
+	TagKey    string
 }
+
+const DefaultTagKey string = "csv"
