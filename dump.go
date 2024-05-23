@@ -51,6 +51,8 @@ func DumpToWriter(slice interface{}, writer io.Writer, options ...CsvOptions) er
 		csvWriter.Comma = option.Separator
 	}
 
+	csvWriter.UseCRLF = option.UseCRLF
+
 	err := csvWriter.Write(option.Header)
 	if err != nil {
 		return err
