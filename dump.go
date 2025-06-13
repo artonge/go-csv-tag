@@ -15,8 +15,8 @@ import (
 // @param slice: an object typically of the form []struct, where the struct is using csv tags.
 // @param writer: the location of where you will write the slice content to. Example: File, Stdout, etc.
 // @param options (optional): options for the csv parsing.
-// @return an error if one occures.
-func DumpToWriter(slice interface{}, writer io.Writer, options ...CsvOptions) error {
+// @return an error if one occurs.
+func DumpToWriter(slice any, writer io.Writer, options ...CsvOptions) error {
 	// If slice is a pointer, get the value it points to.
 	// (if it isn't, Indirect() does nothing and returns the value it was called with).
 	reflectedValue := reflect.Indirect(reflect.ValueOf(slice))
@@ -58,10 +58,10 @@ func DumpToWriter(slice interface{}, writer io.Writer, options ...CsvOptions) er
 		return err
 	}
 
-	for i := 0; i < reflectedValue.Len(); i++ {
-		line := []string{}
+	for i := range reflectedValue.Len() {
+		var line []string
 
-		for j := 0; j < reflectedValue.Type().Elem().NumField(); j++ {
+		for j := range reflectedValue.Type().Elem().NumField() {
 			valueRv := reflectedValue.Index(i)
 			value := valueRv.Field(j)
 			tag := valueRv.Type().Field(j).Tag.Get(option.TagKey)
@@ -91,8 +91,8 @@ func DumpToWriter(slice interface{}, writer io.Writer, options ...CsvOptions) er
 // @param slice: An object typically of the form []struct, where the struct is using csv tag.
 // @param path: The file path string of where you want the file to be created.
 // @param options (optional): options for the csv parsing.
-// @return an error if one occures.
-func DumpToFile(slice interface{}, path string, options ...CsvOptions) error {
+// @return an error if one occurs.
+func DumpToFile(slice any, path string, options ...CsvOptions) error {
 	file, err := os.Create(path)
 	if err != nil {
 		return err
@@ -108,8 +108,8 @@ func DumpToFile(slice interface{}, path string, options ...CsvOptions) error {
 // DumpToString - writes a slice content into a string.
 // @param slice: An object typically of the form []struct, where the struct is using csv tag.
 // @param options (optional): options for the csv parsing.
-// @return a string and an error if one occures.
-func DumpToString(slice interface{}, options ...CsvOptions) (string, error) {
+// @return a string and an error if one occurs.
+func DumpToString(slice any, options ...CsvOptions) (string, error) {
 
 	writer := new(bytes.Buffer)
 

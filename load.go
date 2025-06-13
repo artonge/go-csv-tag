@@ -79,11 +79,10 @@ func LoadFromReader(file io.Reader, destination interface{}, options ...CsvOptio
 // @return an error if one occurs.
 func LoadFromPath(path string, destination interface{}, options ...CsvOptions) error {
 	file, err := os.Open(path)
-	defer file.Close()
 	if err != nil {
 		return err
 	}
-
+	defer file.Close()
 	err = LoadFromReader(file, destination, options...)
 	if err != nil {
 		return fmt.Errorf("error mapping csv from path %v:\n	==> %v", path, err)
@@ -261,6 +260,8 @@ func storeValue(rawValue string, valRv reflect.Value) error {
 			return fmt.Errorf("error parsing bool '%v':\n	==> %v", rawValue, err)
 		}
 		valRv.SetBool(value)
+	default:
+		return fmt.Errorf("unsupported type '%v' for value '%v'", valRv.Kind(), rawValue)
 	}
 
 	return nil
