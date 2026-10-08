@@ -2,7 +2,10 @@ package csvtag
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
+	"io"
+	"strings"
 	"testing"
 )
 
@@ -160,4 +163,83 @@ func TestDumpWithSemicolon(t *testing.T) {
 		t.Fail()
 	}
 
+}
+
+type dumpFailWriter struct {
+	writes int
+	failAt int
+	err    error
+	short  bool
+}
+
+func (w *dumpFailWriter) Write(p []byte) (int, error) {
+	w.writes++
+	if w.writes < w.failAt {
+		return len(p), nil
+	}
+	if w.short {
+		return len(p) - 1, nil
+	}
+	return 0, w.err
+}
+
+func TestDumpToWriterWriteErrors(t *testing.T) {
+	writeErr := errors.New("destination write failed")
+	small := []Demo{{Name: "name", ID: 1, Num: 2.5}}
+	large := []Demo{{Name: strings.Repeat("x", 5000), ID: 1, Num: 2.5}}
+
+	tests := []struct {
+		name    string
+		rows    []Demo
+		options CsvOptions
+		failAt  int
+		short   bool
+	}{
+		{name: "header only", rows: []Demo{}, failAt: 1},
+		{name: "small export", rows: small, failAt: 1},
+		{name: "header short write", rows: []Demo{}, failAt: 1, short: true},
+		{name: "small export short write", rows: small, failAt: 1, short: true},
+		{name: "final flush after successful write", rows: large, failAt: 2},
+		{name: "final flush short write", rows: large, failAt: 2, short: true},
+		{name: "record write", rows: large, failAt: 1},
+		{name: "record short write", rows: large, failAt: 1, short: true},
+		{name: "configured export", rows: small, options: CsvOptions{Separator: ';', UseCRLF: true}, failAt: 1},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			writer := &dumpFailWriter{failAt: tt.failAt, err: writeErr, short: tt.short}
+			wantErr := writeErr
+			if tt.short {
+				wantErr = io.ErrShortWrite
+			}
+			if err := DumpToWriter(tt.rows, writer, tt.options); !errors.Is(err, wantErr) {
+				t.Fatalf("DumpToWriter() error = %v, want %v", err, wantErr)
+			}
+			if writer.writes != tt.failAt {
+				t.Fatalf("destination writes = %d, want %d", writer.writes, tt.failAt)
+			}
+		})
+	}
+}
+
+func TestDumpToWriterConfiguredOutput(t *testing.T) {
+	for _, tt := range []struct {
+		name    string
+		options CsvOptions
+		want    string
+	}{
+		{name: "default", want: "name,ID,number\nname,1,2.5\n"},
+		{name: "separator and CRLF", options: CsvOptions{Separator: ';', UseCRLF: true}, want: "name;ID;number\r\nname;1;2.5\r\n"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			var buffer bytes.Buffer
+			if err := DumpToWriter([]Demo{{Name: "name", ID: 1, Num: 2.5}}, &buffer, tt.options); err != nil {
+				t.Fatal(err)
+			}
+			if got := buffer.String(); got != tt.want {
+				t.Fatalf("output = %q, want %q", got, tt.want)
+			}
+		})
+	}
 }

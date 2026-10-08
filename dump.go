@@ -84,7 +84,8 @@ func DumpToWriter(slice any, writer io.Writer, options ...CsvOptions) error {
 		}
 	}
 
-	return nil
+	csvWriter.Flush()
+	return csvWriter.Error()
 }
 
 // DumpToFile - writes a slice content into a file specified by path.
